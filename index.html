@@ -1,177 +1,308 @@
 <!DOCTYPE html>
 <html lang="id" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyFlow – Student Productivity Dashboard</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>StudyFlow – Student Productivity Dashboard</title>
 
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+        <!-- Fonts & Icons -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+            crossorigin="anonymous">
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+        <!-- Chart.js -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+            defer></script>
 
-    <!-- Custom Styles & Scripts -->
-    <link rel="stylesheet" href="style.css">
-    <script src="ndtw.js" defer></script>
-</head>
-<body>
+        <!-- Custom Styles & Scripts -->
+        <link rel="stylesheet" href="style.css">
+        <script src="ndtw.js" defer></script>
+    </head>
+    <body>
 
-    <!-- Background Pattern -->
-    <div id="bgp"></div>
+        <!-- Background Pattern -->
+        <div id="bgp"></div>
 
-    <!-- Sidebar -->
-    <aside class="sbar" id="sbar">
-        <div class="sbar-hdr" style="position:relative; z-index:1">
-            <div style="display:flex; align-items:center; gap:9px">
-                <div class="av-c" style="width:36px; height:36px; font-size:1rem; flex-shrink:0">A</div>
-                <div>
-                    <p style="color:#fff; font-weight:700; font-size:.92rem; margin:0">Halo, Alan! 👋</p>
-                    <p style="color:rgba(255,255,255,.6); font-size:.67rem; margin:0" id="sbar-date"></p>
+        <!-- Sidebar -->
+        <aside class="sbar" id="sbar">
+            <div class="sbar-hdr" style="position:relative; z-index:1">
+                <div style="display:flex; align-items:center; gap:9px">
+                    <div class="av-c"
+                        style="width:36px; height:36px; font-size:1rem; flex-shrink:0">A</div>
+                    <div>
+                        <p
+                            style="color:#fff; font-weight:700; font-size:.92rem; margin:0">Halo,
+                            Alan! 👋</p>
+                        <p
+                            style="color:rgba(255,255,255,.6); font-size:.67rem; margin:0"
+                            id="sbar-date"></p>
+                    </div>
                 </div>
+                <button onclick="toggleSidebar()"
+                    style="background:rgba(255,255,255,.15); border:none; cursor:pointer; border-radius:8px; padding:6px 9px; color:#fff; font-size:.85rem; z-index:1">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <button onclick="toggleSidebar()" style="background:rgba(255,255,255,.15); border:none; cursor:pointer; border-radius:8px; padding:6px 9px; color:#fff; font-size:.85rem; z-index:1">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div style="flex:1; overflow-y:auto">
-            <div class="sbar-sec">
-                <div class="sbar-lbl"><i class="fas fa-adjust"></i> Display</div>
-                <div class="tog-wrap" onclick="toggleDark()">
-                    <div style="display:flex; align-items:center; gap:9px">
-                        <div style="width:32px; height:32px; border-radius:8px; background:rgba(128,0,32,.12); display:flex; align-items:center; justify-content:center; color:var(--m)">
-                            <i class="fas fa-moon" id="tog-icon"></i>
+            <div style="flex:1; overflow-y:auto">
+                <div class="sbar-sec">
+                    <div class="sbar-lbl"><i class="fas fa-adjust"></i>
+                        Display</div>
+                    <div class="tog-wrap" onclick="toggleDark()">
+                        <div style="display:flex; align-items:center; gap:9px">
+                            <div
+                                style="width:32px; height:32px; border-radius:8px; background:rgba(128,0,32,.12); display:flex; align-items:center; justify-content:center; color:var(--m)">
+                                <i class="fas fa-moon" id="tog-icon"></i>
+                            </div>
+                            <div>
+                                <p
+                                    style="font-weight:600; font-size:.82rem; color:var(--text); margin:0"
+                                    id="tog-lbl">Light Mode</p>
+                                <p
+                                    style="font-size:.66rem; color:var(--sub); margin:0">Click
+                                    to toggle</p>
+                            </div>
                         </div>
-                        <div>
-                            <p style="font-weight:600; font-size:.82rem; color:var(--text); margin:0" id="tog-lbl">Light Mode</p>
-                            <p style="font-size:.66rem; color:var(--sub); margin:0">Click to toggle</p>
+                        <div class="tog-tr" id="tog-tr"><div
+                                class="tog-th"></div></div>
+                    </div>
+                </div>
+                <div class="sbar-sec">
+                    <div class="sbar-lbl"><i class="fas fa-chart-line"></i>
+                        Summary (Live)</div>
+                    <div class="sbar-stat">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px">
+                            <span
+                                style="font-size:.77rem; font-weight:600; color:var(--text)"><i
+                                    class="fas fa-clock"
+                                    style="color:var(--m)"></i> Hours
+                                Studied</span>
+                            <span
+                                style="font-weight:800; font-size:.88rem; color:var(--m)"
+                                id="sb-hrs">18.5h</span>
                         </div>
+                        <div class="ptr"><div class="pb" id="sb-hrs-bar"
+                                style="width:74%"></div></div>
+                        <p
+                            style="font-size:.64rem; color:var(--sub); margin:3px 0 0; text-align:right"
+                            id="sb-hrs-lbl">74% dari 25h</p>
                     </div>
-                    <div class="tog-tr" id="tog-tr"><div class="tog-th"></div></div>
-                </div>
-            </div>
-            <div class="sbar-sec">
-                <div class="sbar-lbl"><i class="fas fa-chart-line"></i> Summary (Live)</div>
-                <div class="sbar-stat">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px">
-                        <span style="font-size:.77rem; font-weight:600; color:var(--text)"><i class="fas fa-clock" style="color:var(--m)"></i> Hours Studied</span>
-                        <span style="font-weight:800; font-size:.88rem; color:var(--m)" id="sb-hrs">18.5h</span>
-                    </div>
-                    <div class="ptr"><div class="pb" id="sb-hrs-bar" style="width:74%"></div></div>
-                    <p style="font-size:.64rem; color:var(--sub); margin:3px 0 0; text-align:right" id="sb-hrs-lbl">74% dari 25h</p>
-                </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px">
-                    <div style="background:var(--sec); border:1px solid var(--border); border-radius:9px; padding:7px 9px; text-align:center">
-                        <p style="font-weight:800; font-size:.95rem; color:var(--m); margin:0" id="sb-pending">0</p>
-                        <p style="font-size:.62rem; color:var(--sub); margin:0">Pending</p>
-                    </div>
-                    <div style="background:var(--sec); border:1px solid var(--border); border-radius:9px; padding:7px 9px; text-align:center">
-                        <p style="font-weight:800; font-size:.95rem; color:var(--m); margin:0" id="sb-gpa">—</p>
-                        <p style="font-size:.62rem; color:var(--sub); margin:0">Avg GPA</p>
-                    </div>
-                    <div style="background:var(--sec); border:1px solid var(--border); border-radius:9px; padding:7px 9px; text-align:center">
-                        <p style="font-weight:800; font-size:.95rem; color:var(--m); margin:0" id="sb-cel">0/0</p>
-                        <p style="font-size:.62rem; color:var(--sub); margin:0">Targets ✓</p>
-                    </div>
-                    <div style="background:var(--sec); border:1px solid var(--border); border-radius:9px; padding:7px 9px; text-align:center">
-                        <p style="font-weight:800; font-size:.95rem; color:var(--m); margin:0" id="sb-streak">7🔥</p>
-                        <p style="font-size:.62rem; color:var(--sub); margin:0">Streak</p>
-                    </div>
-                </div>
-            </div>
-            <div class="sbar-sec">
-                <div class="sbar-lbl"><i class="fas fa-bolt"></i> Shortcut Cepat</div>
-                <button class="sbar-shortcut" onclick="navigate('goals'); toggleSidebar()">
-                    <div class="sbar-sc-ic"><i class="fas fa-piggy-bank"></i></div>
-                    <div><p style="font-weight:600; font-size:.81rem; color:var(--text); margin:0">Goals</p><p style="font-size:.65rem; color:var(--sub); margin:0">Update targets</p></div>
-                    <i class="fas fa-chevron-right" style="margin-left:auto; color:var(--sub); font-size:.75rem"></i>
-                </button>
-                <button class="sbar-shortcut" onclick="navigate('tasks'); toggleSidebar()">
-                    <div class="sbar-sc-ic"><i class="fas fa-tasks"></i></div>
-                    <div><p style="font-weight:600; font-size:.81rem; color:var(--text); margin:0">My Tasks</p><p style="font-size:.65rem; color:var(--sub); margin:0">Check all tasks</p></div>
-                    <i class="fas fa-chevron-right" style="margin-left:auto; color:var(--sub); font-size:.75rem"></i>
-                </button>
-                <button class="sbar-shortcut" onclick="navigate('analytics'); toggleSidebar()">
-                    <div class="sbar-sc-ic"><i class="fas fa-chart-bar"></i></div>
-                    <div><p style="font-weight:600; font-size:.81rem; color:var(--text); margin:0">Analytics</p><p style="font-size:.65rem; color:var(--sub); margin:0">Charts & statistics</p></div>
-                    <i class="fas fa-chevron-right" style="margin-left:auto; color:var(--sub); font-size:.75rem"></i>
-                </button>
-            </div>
-        </div>
-        <div style="padding:9px 1.1rem; border-top:1px solid var(--border); background:var(--sec); text-align:center; flex-shrink:0">
-            <p style="font-size:.66rem; color:var(--sub); margin:0">📚 Studyflow · Local Data</p>
-        </div>
-    </aside>
-
-    <!-- Header -->
-    <header class="hdr">
-        <div class="hdr-logo">
-            <button onclick="toggleSidebar()" style="background:rgba(128,0,32,.1); border:none; cursor:pointer; border-radius:9px; padding:7px 9px; color:var(--m); margin-right:2px">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="logo-ic"><i class="fas fa-book-open"></i></div>
-            <span class="logo-tx">StudyFlow</span>
-        </div>
-        <nav class="hdr-nav">
-            <button class="nb act" data-view="dashboard" onclick="navigate('dashboard')"><i class="fas fa-home"></i> Dashboard</button>
-            <button class="nb" data-view="tasks" onclick="navigate('tasks')"><i class="far fa-clipboard"></i> Tasks <span class="nb-badge" id="hdr-badge" style="display:none">0</span></button>
-            <button class="nb" data-view="calendar" onclick="navigate('calendar')"><i class="far fa-calendar-alt"></i> Calendar</button>
-            <button class="nb" data-view="goals" onclick="navigate('goals')"><i class="fas fa-bullseye"></i> Goals</button>
-            <button class="nb" data-view="analytics" onclick="navigate('analytics')"><i class="fas fa-chart-line"></i> Analytics</button>
-        </nav>
-        <div class="hdr-r">
-            <button class="av-btn" onclick="toggleDrop()">
-                <div class="av-c"><span id="hdr-av-init">A</span></div>
-                <span class="av-nm" id="hdr-av-nm">Alan</span>
-                <i class="fas fa-chevron-down" style="font-size:.7rem; color:var(--sub)"></i>
-            </button>
-            <div class="drop" id="av-drop">
-                <div class="drop-hdr">
-                    <div style="display:flex; align-items:center; gap:8px">
-                        <div class="av-c" style="width:34px; height:34px">A</div>
-                        <div>
-                            <p style="font-weight:700; font-size:.83rem; color:var(--text); margin:0" id="drop-nm">Alan</p>
-                            <p style="font-size:.69rem; color:var(--sub); margin:0">Semester 2</p>
+                    <div
+                        style="display:grid; grid-template-columns:1fr 1fr; gap:7px">
+                        <div
+                            style="background:var(--sec); border:1px solid var(--border); border-radius:9px; padding:7px 9px; text-align:center">
+                            <p
+                                style="font-weight:800; font-size:.95rem; color:var(--m); margin:0"
+                                id="sb-pending">0</p>
+                            <p
+                                style="font-size:.62rem; color:var(--sub); margin:0">Pending</p>
+                        </div>
+                        <div
+                            style="background:var(--sec); border:1px solid var(--border); border-radius:9px; padding:7px 9px; text-align:center">
+                            <p
+                                style="font-weight:800; font-size:.95rem; color:var(--m); margin:0"
+                                id="sb-gpa">—</p>
+                            <p
+                                style="font-size:.62rem; color:var(--sub); margin:0">Avg
+                                GPA</p>
+                        </div>
+                        <div
+                            style="background:var(--sec); border:1px solid var(--border); border-radius:9px; padding:7px 9px; text-align:center">
+                            <p
+                                style="font-weight:800; font-size:.95rem; color:var(--m); margin:0"
+                                id="sb-cel">0/0</p>
+                            <p
+                                style="font-size:.62rem; color:var(--sub); margin:0">Targets
+                                ✓</p>
+                        </div>
+                        <div
+                            style="background:var(--sec); border:1px solid var(--border); border-radius:9px; padding:7px 9px; text-align:center">
+                            <p
+                                style="font-weight:800; font-size:.95rem; color:var(--m); margin:0"
+                                id="sb-streak">7🔥</p>
+                            <p
+                                style="font-size:.62rem; color:var(--sub); margin:0">Streak</p>
                         </div>
                     </div>
                 </div>
-                <button class="drop-item" onclick="openProfile(); toggleDrop()">
-                    <div class="drop-ic"><i class="fas fa-user"></i></div>
-                    <div><p style="font-weight:600; font-size:.81rem; color:var(--m); margin:0">Profil Saya</p><p style="font-size:.67rem; color:var(--sub); margin:0">Statistik & pencapaian</p></div>
-                </button>
-                <button class="drop-item" onclick="alert('⚙️ Pengaturan segera hadir!'); toggleDrop()">
-                    <div class="drop-ic" style="background:rgba(100,100,100,.1); color:#888"><i class="fas fa-cog"></i></div>
-                    <div><p style="font-weight:600; font-size:.81rem; color:var(--text); margin:0">Pengaturan</p><p style="font-size:.67rem; color:var(--sub); margin:0">Konfigurasi aplikasi</p></div>
-                </button>
-                <button class="drop-item" onclick="toggleDrop()" style="color:#dc2626">
-                    <div class="drop-ic" style="background:rgba(220,38,38,.1); color:#dc2626"><i class="fas fa-sign-out-alt"></i></div>
-                    <div><p style="font-weight:600; font-size:.81rem; color:#dc2626; margin:0">Logout</p><p style="font-size:.67rem; color:var(--sub); margin:0">Keluar akun</p></div>
-                </button>
+                <div class="sbar-sec">
+                    <div class="sbar-lbl"><i class="fas fa-bolt"></i> Shortcut
+                        Cepat</div>
+                    <button class="sbar-shortcut"
+                        onclick="navigate('goals'); toggleSidebar()">
+                        <div class="sbar-sc-ic"><i
+                                class="fas fa-piggy-bank"></i></div>
+                        <div><p
+                                style="font-weight:600; font-size:.81rem; color:var(--text); margin:0">Goals</p><p
+                                style="font-size:.65rem; color:var(--sub); margin:0">Update
+                                targets</p></div>
+                        <i class="fas fa-chevron-right"
+                            style="margin-left:auto; color:var(--sub); font-size:.75rem"></i>
+                    </button>
+                    <button class="sbar-shortcut"
+                        onclick="navigate('tasks'); toggleSidebar()">
+                        <div class="sbar-sc-ic"><i
+                                class="fas fa-tasks"></i></div>
+                        <div><p
+                                style="font-weight:600; font-size:.81rem; color:var(--text); margin:0">My
+                                Tasks</p><p
+                                style="font-size:.65rem; color:var(--sub); margin:0">Check
+                                all tasks</p></div>
+                        <i class="fas fa-chevron-right"
+                            style="margin-left:auto; color:var(--sub); font-size:.75rem"></i>
+                    </button>
+                    <button class="sbar-shortcut"
+                        onclick="navigate('analytics'); toggleSidebar()">
+                        <div class="sbar-sc-ic"><i
+                                class="fas fa-chart-bar"></i></div>
+                        <div><p
+                                style="font-weight:600; font-size:.81rem; color:var(--text); margin:0">Analytics</p><p
+                                style="font-size:.65rem; color:var(--sub); margin:0">Charts
+                                & statistics</p></div>
+                        <i class="fas fa-chevron-right"
+                            style="margin-left:auto; color:var(--sub); font-size:.75rem"></i>
+                    </button>
+                </div>
             </div>
+            <div
+                style="padding:9px 1.1rem; border-top:1px solid var(--border); background:var(--sec); text-align:center; flex-shrink:0">
+                <p style="font-size:.66rem; color:var(--sub); margin:0">📚
+                    Studyflow · Local Data</p>
+            </div>
+        </aside>
+
+        <!-- Header -->
+        <header class="hdr">
+            <div class="hdr-logo">
+                <button onclick="toggleSidebar()"
+                    style="background:rgba(128,0,32,.1); border:none; cursor:pointer; border-radius:9px; padding:7px 9px; color:var(--m); margin-right:2px">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo-ic"><i class="fas fa-book-open"></i></div>
+                <span class="logo-tx">StudyFlow</span>
+            </div>
+            <nav class="hdr-nav">
+                <button class="nb act" data-view="dashboard"
+                    onclick="navigate('dashboard')"><i class="fas fa-home"></i>
+                    Dashboard</button>
+                <button class="nb" data-view="tasks"
+                    onclick="navigate('tasks')"><i class="far fa-clipboard"></i>
+                    Tasks <span class="nb-badge" id="hdr-badge"
+                        style="display:none">0</span></button>
+                <button class="nb" data-view="calendar"
+                    onclick="navigate('calendar')"><i
+                        class="far fa-calendar-alt"></i> Calendar</button>
+                <button class="nb" data-view="goals"
+                    onclick="navigate('goals')"><i class="fas fa-bullseye"></i>
+                    Goals</button>
+                <button class="nb" data-view="analytics"
+                    onclick="navigate('analytics')"><i
+                        class="fas fa-chart-line"></i> Analytics</button>
+            </nav>
+            <div class="hdr-r">
+                <button class="av-btn" onclick="toggleDrop()">
+                    <div class="av-c"><span id="hdr-av-init">A</span></div>
+                    <span class="av-nm" id="hdr-av-nm">Alan</span>
+                    <i class="fas fa-chevron-down"
+                        style="font-size:.7rem; color:var(--sub)"></i>
+                </button>
+                <div class="drop" id="av-drop">
+                    <div class="drop-hdr">
+                        <div style="display:flex; align-items:center; gap:8px">
+                            <div class="av-c"
+                                style="width:34px; height:34px">A</div>
+                            <div>
+                                <p
+                                    style="font-weight:700; font-size:.83rem; color:var(--text); margin:0"
+                                    id="drop-nm">Alan</p>
+                                <p
+                                    style="font-size:.69rem; color:var(--sub); margin:0">Semester
+                                    2</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="drop-item"
+                        onclick="openProfile(); toggleDrop()">
+                        <div class="drop-ic"><i class="fas fa-user"></i></div>
+                        <div><p
+                                style="font-weight:600; font-size:.81rem; color:var(--m); margin:0">Profil
+                                Saya</p><p
+                                style="font-size:.67rem; color:var(--sub); margin:0">Statistik
+                                & pencapaian</p></div>
+                    </button>
+                    <button class="drop-item"
+                        onclick="alert('⚙️ Pengaturan segera hadir!'); toggleDrop()">
+                        <div class="drop-ic"
+                            style="background:rgba(100,100,100,.1); color:#888"><i
+                                class="fas fa-cog"></i></div>
+                        <div><p
+                                style="font-weight:600; font-size:.81rem; color:var(--text); margin:0">Pengaturan</p><p
+                                style="font-size:.67rem; color:var(--sub); margin:0">Konfigurasi
+                                aplikasi</p></div>
+                    </button>
+                    <button class="drop-item" onclick="toggleDrop()"
+                        style="color:#dc2626">
+                        <div class="drop-ic"
+                            style="background:rgba(220,38,38,.1); color:#dc2626"><i
+                                class="fas fa-sign-out-alt"></i></div>
+                        <div><p
+                                style="font-weight:600; font-size:.81rem; color:#dc2626; margin:0">Logout</p><p
+                                style="font-size:.67rem; color:var(--sub); margin:0">Keluar
+                                akun</p></div>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="vc" id="vc"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo-ic" style="margin-right:8px;"><i
+                            class="fas fa-book-open"></i></div>
+                    <span class="logo-tx">StudyFlow</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://wa.me/6282156789035" target="_blank"
+                        class="footer-link">
+                        <i class="fab fa-whatsapp"></i> 0821-5678-9035
+                    </a>
+                    <a href="mailto:msahlan01@student.ciputra.ac.id"
+                        class="footer-link">
+                        <i class="fas fa-envelope"></i>
+                        msahlan01@student.ciputra.ac.id
+                    </a>
+                </div>
+                <p class="footer-copy">© 2025 StudyFlow · Dibuat dengan ❤️ oleh
+                    Sahlan</p>
+            </div>
+        </footer>
+
+        <!-- Generic Modal -->
+        <div class="ov" id="ov" onclick="closeModal()"></div>
+        <div class="modal" id="modal">
+            <div class="mhd">
+                <span class="mt" id="modal-title">Modal</span>
+                <button onclick="closeModal()" class="bic"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div id="modal-body"></div>
         </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="main">
-        <div class="vc" id="vc"></div>
-    </main>
-
-    <!-- Generic Modal -->
-    <div class="ov" id="ov" onclick="closeModal()"></div>
-    <div class="modal" id="modal">
-        <div class="mhd">
-            <span class="mt" id="modal-title">Modal</span>
-            <button onclick="closeModal()" class="bic"><i class="fas fa-times"></i></button>
+        <!-- Profile Panel -->
+        <div class="prof-ov" id="prof-ov" onclick="closeProfile()"></div>
+        <div class="prof-p" id="prof-p">
+            <div id="prof-content"></div>
         </div>
-        <div id="modal-body"></div>
-    </div>
 
-    <!-- Profile Panel -->
-    <div class="prof-ov" id="prof-ov" onclick="closeProfile()"></div>
-    <div class="prof-p" id="prof-p">
-        <div id="prof-content"></div>
-    </div>
-
-</body>
+    </body>
 </html>
